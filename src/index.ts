@@ -16,7 +16,7 @@ export const Config: Schema<Config> = Schema.object({
 
 const hitNotice = ["随着一声巨响倒下了……", "面对着不可逆转的命运，选择了放弃……", "倒在了一片血泊之中……", "意外走火了", "的视线逐渐模糊……"];
 const unhitNotice = ["躲过一劫", "扣下了扳机，什么事也没发生", "向死神借了一条命", "幸运的躲过一击"];
-const banDuration = 1;
+
 
 export function apply(ctx: Context, config: Config) {
     // write your plugin here
@@ -40,10 +40,9 @@ export function apply(ctx: Context, config: Config) {
             }
 
             let bullets = [];
-            let players = {};
-            let liveACount = "liveA" in options ? options.liveA : Random.int(1, options.quantity - 1);
             let position = 0;
-
+            let liveACount = "liveA" in options ? options.liveA : Random.int(1, options.quantity - 1);
+            
             //生成随机“子弹”
             for (let i = 0; i < options.quantity; i++) {
                 if (i <= liveACount - 1) {
@@ -57,8 +56,9 @@ export function apply(ctx: Context, config: Config) {
 
             session.send("群轮盘游戏开始！\n发送“开枪”即可参与游戏，发送“收手”或两分钟之内无回复自动结束");
 
-            let messageEvent = ctx.on("message", (session) => {
-                players = {};
+            let messageEvent = ctx.middleware((session,next) => {
+                let players = {};
+                
                 let user = session.event.user;
                 let guild = session.event.guild
 
@@ -79,8 +79,8 @@ export function apply(ctx: Context, config: Config) {
                         //抽中实弹
                         if (bullets[position]) {
                             if (!("disableBan" in options)) {
-                                session.bot.muteGuildMember(guild.id, user.id, banDuration * 1000)
-                                session.sendQueued(`${user.name}已被禁言 ${banDuration} 秒`)
+                                session.bot.muteGuildMember(guild.id, user.id, config.banDuration * 1000)
+                                session.sendQueued(`${user.name}已被禁言 ${config.banDuration} 秒`)
                             }
 
                             session.sendQueued(`${user.name}${hitNotice[Random.int(0, hitNotice.length - 1)]}\n\n第 ${position + 1} 颗是实弹\n还有 ${options.quantity - (position + 1)} 颗子弹\n发送“开枪”继续`)
@@ -91,25 +91,29 @@ export function apply(ctx: Context, config: Config) {
                         position++;
 
                         if (position >= options.quantity) {
+                            //position = 0;
                             let t = ""
                             for (let u = 0; u < bullets.length; u++) {
                                 t += bullets[u] ? "●" : "○";
                             }
 
-
                             session.sendQueued(`游戏结束\n共 ${options.quantity} 颗子弹，${liveACount} 颗实弹\n${t}\n\n发送“轮盘”可再开一局 (OωO)`)
-
+                            
+                            //完成后销毁掉中间件和timer
                             timer();
-                            return;
+                            messageEvent()
+                            return next();
 
                         }
 
                     }
 
                 } else if (session.content === "收手") {
-                    timer();
                     session.send("游戏结束");
-                    return
+                    
+                    timer();
+                    messageEvent();
+                    return next();
                 }
             })
 
