@@ -1,22 +1,37 @@
 {
   "name": "koishi-plugin-group-roulette",
   "description": "群聊轮盘游戏",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
     "lib",
     "dist"
   ],
-  "license": "MIT",
+  "contributors": [
+    "Asanatsa <me@asanatsa.cc>"
+  ],
+  "license": "GPL-3.0-only",
+  "homepage": "https://github.com/Asanatsa/koishi-plugin-group-roulette",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Asanatsa/koishi-plugin-group-roulette.git"
+  },
   "scripts": {},
   "keywords": [
     "chatbot",
     "koishi",
-    "plugin"
+    "plugin",
+    "meme"
   ],
   "devDependencies": {},
   "peerDependencies": {
     "koishi": "^4.17.11"
+  },
+  "koishi": {
+    "description": {
+      "en": "group chat roulette game",
+      "zh": "群聊轮盘游戏"
+    }
   }
 }
