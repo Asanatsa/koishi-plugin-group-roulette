@@ -39,6 +39,7 @@ export function apply(ctx: Context, config: Config) {
                 return "实弹数量不能小于 1"
             }
 
+            let players = {};
             let bullets = [];
             let position = 0;
             let liveACount = "liveA" in options ? options.liveA : Random.int(1, options.quantity - 1);
@@ -57,7 +58,7 @@ export function apply(ctx: Context, config: Config) {
             session.send("群轮盘游戏开始！\n发送“开枪”即可参与游戏，发送“收手”或两分钟之内无回复自动结束");
 
             let messageEvent = ctx.middleware((session,next) => {
-                let players = {};
+                
                 
                 let user = session.event.user;
                 let guild = session.event.guild
