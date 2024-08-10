@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-group-roulette",
   "description": "群聊轮盘游戏",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
