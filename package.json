@@ -1,7 +1,7 @@
 {
   "name": "koishi-plugin-group-roulette",
   "description": "群聊轮盘游戏",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "files": [
@@ -29,6 +29,7 @@
     "koishi": "^4.17.11"
   },
   "koishi": {
+    "category": "game",
     "description": {
       "en": "group chat roulette game",
       "zh": "群聊轮盘游戏"

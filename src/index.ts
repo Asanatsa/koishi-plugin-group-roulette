@@ -110,6 +110,7 @@ export function apply(ctx: Context, config: Config) {
                     }
 
                 } else if (session.content === "收手") {
+                    
                     session.send("游戏结束");
                     
                     timer();
